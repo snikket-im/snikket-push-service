@@ -1,0 +1,15 @@
+---
+- name: "Install Postgres"
+  apt:
+    name: postgresql-11
+    state: present
+    install_recommends: yes
+- name: "Create database"
+  postgresql_db:
+    name: snikket_push
+- name: "Create p2 database user"
+  postgresql_user:
+    db: snikket_push
+    name: p2
+    password: "{{ lookup('password', 'credentials/p2_db' length=32') }}"
+

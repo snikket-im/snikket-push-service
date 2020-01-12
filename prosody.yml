@@ -1,0 +1,14 @@
+---
+- name: "Add Prosody package signing key"
+  apt_key:
+    url: "https://packages.prosody.im/debian/pubkey.asc"
+- name: "Add Prosody package repo"
+  apt_repository:
+    repo: "deb https://packages.prosody.im/debian buster main"
+- name: "Install Prosody package"
+  apt:
+    name: prosody-trunk
+    state: present
+    install_recommends: yes
+
+# TODO: configure Prosody

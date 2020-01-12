@@ -1,0 +1,44 @@
+---
+- name: "Fetch p2"
+  git:
+    repo: https://github.com/iNPUTmice/p2.git
+    dest: /src/p2
+- name: "Add postgres JDBC driver"
+  xml:
+    path: /opt/p2/pom.xml
+    xpath: project/dependencies
+    add_children: |
+      <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>42.2.9</version>
+      </dependency>
+    input_type: xml
+- name: "Install Maven"
+  apt:
+    name: maven
+- name: "Build p2"
+  command: mvn package
+  args:
+    chdir: /src/p2
+- name: "Install p2 jar"
+  copy:
+    src: /src/p2/target/p2-0.3.jar
+    dest: /opt/p2/p2.jar
+- name: "Create p2 config directory"
+  file:
+    path: /etc/p2
+    state: directory
+- name: "Create p2 user"
+  user:
+    name: p2
+    home: /var/lib/p2
+    system: yes
+- name: "Create p2 data directory"
+  file:
+    path: /var/lib/p2
+    state: directory
+    owner: p2
+    mode: 0750
+
+# TODO: configure and install service
