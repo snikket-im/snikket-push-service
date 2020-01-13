@@ -5,9 +5,11 @@
     state: present
     install_recommends: yes
 - name: "Create database"
+  become_user: postgres
   postgresql_db:
     name: snikket_push
 - name: "Create p2 database user"
+  become_user: postgres
   postgresql_user:
     db: snikket_push
     name: p2
