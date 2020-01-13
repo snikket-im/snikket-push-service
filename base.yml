@@ -1,0 +1,11 @@
+---
+- name: "Install packages required for playbook"
+  apt:
+    name: "{{item}}"
+  loop:
+    - gpg
+    - python3-apt
+    - python3-psycopg2
+    - git
+    - python3-lxml
+    - maven

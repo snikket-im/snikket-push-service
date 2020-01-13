@@ -5,6 +5,7 @@
   vars:
     ansible_python_interpeter: /usr/bin/python3
   tasks:
+    - import_tasks: base.yml
     - import_tasks: prosody.yml
     - import_tasks: database.yml
     - import_tasks: p2.yml
