@@ -3,6 +3,7 @@
   git:
     repo: https://github.com/iNPUTmice/p2.git
     dest: /src/p2
+    force: yes
 - name: "Add postgres JDBC driver"
   xml:
     path: /src/p2/pom.xml
