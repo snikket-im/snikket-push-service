@@ -5,7 +5,7 @@
     dest: /src/p2
 - name: "Add postgres JDBC driver"
   xml:
-    path: /opt/p2/pom.xml
+    path: /src/p2/pom.xml
     xpath: project/dependencies
     add_children: |
       <dependency>
