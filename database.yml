@@ -11,5 +11,5 @@
   postgresql_user:
     db: snikket_push
     name: p2
-    password: "{{ lookup('password', 'credentials/p2_db' length=32') }}"
+    password: "{{ lookup('password', 'credentials/p2_db length=32') }}"
 
