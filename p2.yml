@@ -33,10 +33,15 @@
   command: mvn package
   args:
     chdir: /src/p2
+- name: "Create p2 app directory"
+  file:
+    path: /opt/p2
+    state: directory
 - name: "Install p2 jar"
   copy:
     src: /src/p2/target/p2-0.3.jar
     dest: /opt/p2/p2.jar
+    remote_src: yes
 - name: "Create p2 config directory"
   file:
     path: /etc/p2
