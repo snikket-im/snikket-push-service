@@ -5,16 +5,27 @@
     dest: /src/p2
     force: yes
 - name: "Add postgres JDBC driver"
-  xml:
+  blockinfile:
+    marker: "<!-- {mark} add postgres support -->"
     path: /src/p2/pom.xml
-    xpath: project/dependencies
-    add_children: |
+    insertbefore: "</dependencies>"
+    block: |
       <dependency>
         <groupId>org.postgresql</groupId>
         <artifactId>postgresql</artifactId>
         <version>42.2.9</version>
       </dependency>
-    input_type: xml
+- name: "Add required XML lib"
+  blockinfile:
+    marker: "<!-- {mark} add javax.xml.bind -->"
+    path: /src/p2/pom.xml
+    insertbefore: "</dependencies>"
+    block: |
+      <dependency>
+        <groupId>javax.xml.bind</groupId>
+        <artifactId>jaxb-api</artifactId>
+        <version>2.3.0</version>
+      </dependency>
 - name: "Install Maven"
   apt:
     name: maven
