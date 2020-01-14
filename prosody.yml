@@ -18,3 +18,14 @@
   lineinfile:
     path: /etc/prosody/prosody.cfg.lua
     line: "Include \"conf.d/*.cfg.lua\""
+- name: "Import certificates"
+  command:
+  args:
+    argv:
+    - prosodyctl
+    - "--root"
+    - cert
+    - import
+    - /etc/letsencrypt/live/
+  notify:
+  - restart prosody
