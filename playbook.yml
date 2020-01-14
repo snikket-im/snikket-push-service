@@ -9,4 +9,5 @@
     - import_tasks: prosody.yml
     - import_tasks: database.yml
     - import_tasks: p2.yml
-  
+  handlers:
+    - import_tasks: handlers.yml

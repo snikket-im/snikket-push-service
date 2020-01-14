@@ -57,5 +57,22 @@
     state: directory
     owner: p2
     mode: 0750
+- name: "Deploy p2 config file"
+  template:
+    src: templates/p2.conf
+    dest: /etc/p2/p2.conf
+- name: "Deploy service file"
+  copy:
+    src: files/p2.service
+    dest: /etc/systemd/system/p2.service
+
+- name: "Add component configuration to Prosody"
+  template:
+    src: templates/p2.cfg.lua
+    dest: /etc/prosody/conf.d/p2.cfg.lua
+    owner: prosody
+    mode: 0750
+  notify:
+    - restart prosody
 
 # TODO: configure and install service

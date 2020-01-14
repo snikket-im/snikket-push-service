@@ -10,5 +10,11 @@
     name: prosody-trunk
     state: present
     install_recommends: yes
-
-# TODO: configure Prosody
+- name: "Create conf.d for Prosody"
+  file:
+    path: /etc/prosody/conf.d
+    state: directory
+- name: "Include conf.d from main config"
+  lineinfile:
+    path: /etc/prosody/prosody.cfg.lua
+    line: "Include \"conf.d/*.cfg.lua\""
