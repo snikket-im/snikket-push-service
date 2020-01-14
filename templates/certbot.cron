@@ -1,0 +1,1 @@
+12 3 * * 0 root certbot renew --standalone && systemctl reload prosody

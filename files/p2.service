@@ -4,7 +4,7 @@ Description=Snikket Push Proxy
 [Service]
 User=p2
 Group=p2
-ExecStart=/usr/bin/java -jar /opt/p2/p2-0.3.jar -c /etc/p2/config.json
+ExecStart=/usr/bin/java -jar /opt/p2/p2.jar -c /etc/p2/p2.conf
 
 [Install]
 WantedBy=multi-user.target

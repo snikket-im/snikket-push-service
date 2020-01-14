@@ -1,0 +1,32 @@
+---
+- name: "Install certbot"
+  apt:
+    name: ["certbot"]
+  tags:
+  - certbot
+
+- name: "Create crontab"
+  template:
+    src: certbot.cron
+    dest: /etc/cron.d/
+    owner: root
+    group: root
+    mode: u=rw,go=r
+  tags:
+  - certbot
+
+- name: "Obtain initial certificate"
+  command:
+  args:
+    argv:
+    - "certbot"
+    - "certonly"
+    - "--agree-tos"
+    - "-m"
+    - "{{ certbot_account_email }}"
+    - "--standalone"
+    - "-d"
+    - "{{ push_domain }}"
+    creates: /etc/letsencrypt/live/push.snikket.net/privkey.pem
+  tags:
+  - certbot
