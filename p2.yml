@@ -75,4 +75,9 @@
   notify:
     - restart prosody
 
-# TODO: configure and install service
+- name: "Enable and start service"
+  systemd:
+    name: p2
+    enabled: yes
+    state: started
+    daemon_reload: yes
