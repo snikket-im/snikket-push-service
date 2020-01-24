@@ -6,9 +6,14 @@
     ansible_python_interpeter: /usr/bin/python3
   tasks:
     - import_tasks: base.yml
+      tags: base
     - import_tasks: certbot.yml
+      tags: certbot
     - import_tasks: prosody.yml
+      tags: prosody
     - import_tasks: database.yml
+      tags: database
     - import_tasks: p2.yml
+      tags: p2
   handlers:
     - import_tasks: handlers.yml
