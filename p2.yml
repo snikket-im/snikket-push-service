@@ -1,4 +1,14 @@
 ---
+- name: "OpenJDK: Add package repo key"
+  apt_key:
+    url: https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public
+- name: "OpenJDK: Add package repo"
+  apt_repository:
+    repo: "deb https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/ buster main"
+    filename: adoptopenjdk
+- name: "OpenJDK: Install package"
+  apt:
+    name: adoptopenjdk-8-hotspot
 - name: "Fetch p2"
   git:
     repo: https://github.com/iNPUTmice/p2.git
@@ -14,17 +24,6 @@
         <groupId>org.postgresql</groupId>
         <artifactId>postgresql</artifactId>
         <version>42.2.9</version>
-      </dependency>
-- name: "Add required XML lib"
-  blockinfile:
-    marker: "<!-- {mark} add javax.xml.bind -->"
-    path: /src/p2/pom.xml
-    insertbefore: "</dependencies>"
-    block: |
-      <dependency>
-        <groupId>javax.xml.bind</groupId>
-        <artifactId>jaxb-api</artifactId>
-        <version>2.3.0</version>
       </dependency>
 - name: "Install Maven"
   apt:
