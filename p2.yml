@@ -14,17 +14,6 @@
     repo: https://github.com/iNPUTmice/p2.git
     dest: /src/p2
     force: yes
-- name: "Add postgres JDBC driver"
-  blockinfile:
-    marker: "<!-- {mark} add postgres support -->"
-    path: /src/p2/pom.xml
-    insertbefore: "</dependencies>"
-    block: |
-      <dependency>
-        <groupId>org.postgresql</groupId>
-        <artifactId>postgresql</artifactId>
-        <version>42.2.9</version>
-      </dependency>
 - name: "Install Maven"
   apt:
     name: maven

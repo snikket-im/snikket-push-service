@@ -1,17 +1,21 @@
 ---
-- name: "Install Postgres"
+- name: "Install MariaDB"
   apt:
-    name: postgresql-11
+    name: mariadb-server
     state: present
     install_recommends: yes
 - name: "Create database"
-  become_user: postgres
-  postgresql_db:
+  become: yes
+  mysql_db:
     name: snikket_push
+    encoding: utf8mb4
+    login_user: root
+    login_unix_socket: /var/run/mysqld/mysqld.sock
 - name: "Create p2 database user"
-  become_user: postgres
-  postgresql_user:
-    db: snikket_push
+  become: yes
+  mysql_user:
     name: p2
     password: "{{ lookup('password', 'credentials/p2_db length=32') }}"
-
+    priv: "snikket_push.*:ALL"
+    login_user: root
+    login_unix_socket: /var/run/mysqld/mysqld.sock
