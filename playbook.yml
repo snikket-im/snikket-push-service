@@ -15,5 +15,7 @@
       tags: database
     - import_tasks: p2.yml
       tags: p2
+    - import_tasks: tigase.yml
+      tags: tigase
   handlers:
     - import_tasks: handlers.yml

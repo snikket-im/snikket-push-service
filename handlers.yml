@@ -3,3 +3,14 @@
   service:
     name: prosody
     state: restarted
+- name: import certs
+  command:
+  args:
+    argv:
+    - prosodyctl
+    - "--root"
+    - cert
+    - import
+    - /etc/letsencrypt/live/
+  notify:
+  - restart prosody

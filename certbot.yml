@@ -15,7 +15,7 @@
   tags:
   - certbot
 
-- name: "Obtain initial certificate"
+- name: "Obtain initial certificate (Android)"
   command:
   args:
     argv:
@@ -27,6 +27,22 @@
     - "--standalone"
     - "-d"
     - "{{ push_domain }}"
-    creates: /etc/letsencrypt/live/push.snikket.net/privkey.pem
+    creates: /etc/letsencrypt/live/{{ push_domain }}/privkey.pem
+  tags:
+  - certbot
+
+- name: "Obtain initial certificate (iOS)"
+  command:
+  args:
+    argv:
+    - "certbot"
+    - "certonly"
+    - "--agree-tos"
+    - "-m"
+    - "{{ certbot_account_email }}"
+    - "--standalone"
+    - "-d"
+    - "{{ ios_push_domain }}"
+    creates: /etc/letsencrypt/live/{{ ios_push_domain }}/privkey.pem
   tags:
   - certbot

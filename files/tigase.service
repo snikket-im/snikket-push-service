@@ -1,0 +1,19 @@
+[Unit]
+Description=Tigase XMPP Server
+After=syslog.target network-online.target
+
+[Service]
+Type=forking
+User=tigase
+WorkingDirectory=/opt/tigase-server/
+PIDFile=/opt/tigase-server/logs/tigase.pid
+ExecStart=/opt/tigase-server/scripts/tigase.sh start etc/tigase.conf
+ExecStop=/opt/tigase-server/scripts/tigase.sh stop etc/tigase.conf
+StandardOutput=syslog
+StandardError=syslog
+Restart=on-failure
+RestartSec=10
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target

@@ -4,7 +4,9 @@
     name: mariadb-server
     state: present
     install_recommends: yes
-- name: "Create database"
+
+# Set up database for p2 push component (Android)
+- name: "Create database (p2)"
   become: yes
   mysql_db:
     name: snikket_push
@@ -17,5 +19,22 @@
     name: p2
     password: "{{ lookup('password', 'credentials/p2_db length=32') }}"
     priv: "snikket_push.*:ALL"
+    login_user: root
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+
+# Set up database for Tigase push component (iOS)
+- name: "Create database (ios)"
+  become: yes
+  mysql_db:
+    name: snikket_push_ios
+    encoding: utf8mb4
+    login_user: root
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+- name: "Create ios database user"
+  become: yes
+  mysql_user:
+    name: ios_push
+    password: "{{ lookup('password', 'credentials/ios_push_db length=32') }}"
+    priv: "snikket_push_ios.*:ALL"
     login_user: root
     login_unix_socket: /var/run/mysqld/mysqld.sock

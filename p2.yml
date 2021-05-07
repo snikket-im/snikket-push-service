@@ -1,4 +1,5 @@
 ---
+# Java installation
 - name: "OpenJDK: Add package repo key"
   apt_key:
     url: https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public
@@ -17,10 +18,17 @@
 - name: "Install Maven"
   apt:
     name: maven
+
+# Build
 - name: "Build p2"
   command: mvn package
   args:
     chdir: /src/p2
+  environment:
+    JAVA_HOME: /usr/lib/jvm/adoptopenjdk-8-hotspot-amd64
+    PATH: "/usr/lib/jvm/adoptopenjdk-8-hotspot-amd64/bin:{{ ansible_env.PATH }}"
+
+# Install
 - name: "Create p2 app directory"
   file:
     path: /opt/p2
@@ -45,6 +53,8 @@
     state: directory
     owner: p2
     mode: 0750
+
+# Configure
 - name: "Deploy p2 config file"
   template:
     src: templates/p2.conf
@@ -61,6 +71,7 @@
     owner: prosody
     mode: 0750
   notify:
+    - import certs
     - restart prosody
 
 - name: "Enable and start service"

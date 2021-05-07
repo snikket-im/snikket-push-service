@@ -1,0 +1,95 @@
+---
+# Java installation
+- name: "Install OpenJDK 11"
+  apt:
+    name: openjdk-11-jre-headless
+
+# Download and extract Tigase
+- name: "Create Tigase source directory"
+  file:
+    path: /src/tigase-server
+    state: directory
+    mode: 0750
+- name: "Download Tigase XMPP Server"
+  get_url:
+    url: https://build.tigase.net/nightlies/dists/2021-01-18/tigase-server-8.2.0-SNAPSHOT-b11261-dist-max.tar.gz
+    dest: /src/tigase-server/tigase-server-8.2.0.tar.gz
+- name: "Extract Tigase XMPP Server"
+  unarchive:
+    src: /src/tigase-server/tigase-server-8.2.0.tar.gz
+    dest: /src/tigase-server
+    remote_src: yes
+
+# Install
+- name: Install Tigase XMPP Server
+  copy:
+    src: /src/tigase-server/tigase-server-8.2.0-SNAPSHOT-b11261/
+    dest: /opt/tigase-server
+    local_follow: no
+    remote_src: yes
+- name: "Create tigase user"
+  user:
+    name: tigase
+    home: /var/lib/tigase
+    system: yes
+- name: "Deploy tigase service file"
+  copy:
+    src: files/tigase.service
+    dest: /etc/systemd/system/tigase.service
+
+# Configure
+- name: "Deploy Tigase config file"
+  template:
+    src: templates/tigase/config.tdsl
+    dest: /opt/tigase-server/etc/config.tdsl
+    mode: 0750
+    owner: tigase
+    group: tigase
+- name: "Deploy component config file for Tigase"
+  template:
+    src: templates/tigase/externalComponentItems
+    dest: /opt/tigase-server/etc/externalComponentItems
+    mode: 0750
+    owner: tigase
+    group: tigase
+- name: "Add component configuration to Prosody"
+  template:
+    src: templates/tigase/ios_push.cfg.lua
+    dest: /etc/prosody/conf.d/ios_push.cfg.lua
+    owner: prosody
+    mode: 0750
+  notify:
+    - import certs
+    - restart prosody
+- name: "Create configuration directory"
+  file:
+    path: /etc/snikket-push
+    state: directory
+    mode: 0750
+    owner: root
+    group: tigase
+- name: Upload APNS certificates
+  copy:
+    src: credentials/ios/
+    dest: /etc/snikket-push/
+    mode: 0750
+    owner: root
+    group: tigase
+
+# Schema upgrade
+- name: "Upgrade Tigase database schemas"
+  command:
+  args:
+    argv:
+      - /opt/tigase-server/scripts/tigase.sh
+      - upgrade-schema
+      - "--rootUser=ios_push"
+      - "--rootPass={{ lookup('password', 'credentials/ios_push_db length=32') }}"
+
+# Start service
+- name: "Enable and start service"
+  systemd:
+    name: tigase
+    enabled: yes
+    state: started
+    daemon_reload: yes

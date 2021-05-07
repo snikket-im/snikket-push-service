@@ -1,0 +1,1 @@
+{{ ios_push_domain }}:{{ lookup('password', 'credentials/ios_push_xmpp length=32 chars=ascii_letters,digits') }}:connect:5347:localhost:accept

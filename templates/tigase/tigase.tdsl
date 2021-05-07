@@ -1,0 +1,30 @@
+admins = [ '{{ admin_jid }}' ]
+
+'default-virtual-host' = '{{ ios_push_domain }}'
+
+dataSource () {
+    default () {
+        uri = 'jdbc:mysql://localhost:3306/snikket_push_ios?user=ios_push&password={{ lookup('password', 'credentials/ios_push_db length=32') }}'
+    }
+}
+
+userRepository {
+    default () {}
+}
+
+authRepository {
+    default () {}
+}
+
+'push-ios' (class: tigase.push.PushNotificationsComponent) {
+    'snikket:apns:1' (class: tigase.push.apns.APNsBinaryApiProvider) {
+        'cert-file' = '/etc/snikket-push/apns/ssl/certificate.p12'
+        'cert-password' = '{{ ios_apns_cert_password }}'
+        'pushkit-cert-file' = '/etc/snikket-push/apns-voip/pushkit/ssl/certificate.p12'
+        fallbackToSandbox = true
+        'apns-topic' = 'org.snikket.ios'
+    }
+}
+
+ext () {
+}
