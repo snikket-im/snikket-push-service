@@ -15,6 +15,8 @@
     repo: https://github.com/iNPUTmice/p2.git
     dest: /src/p2
     force: yes
+    refspec: '+refs/heads/master'
+    version: 909be3428864f8e80b4a27ff9aa9dac7e89a86e2
 - name: "Install Maven"
   apt:
     name: maven
